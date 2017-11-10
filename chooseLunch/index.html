@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>中午吃啥</title>
+    <link rel="stylesheet" href="dist/css/sweetalert.css">
+    <link rel="stylesheet" href="dist/css/style.css">
+
+    <style>
+        img{
+            width: 500px;
+            height: 250px;
+            position: absolute;
+            left: 35%;
+            top: 25%;
+        }
+        .title{
+            width: 500px;
+            margin: 0 auto;
+            position: absolute;
+            left: 47%;
+            top: 55%;
+            font-family: 微软雅黑;
+            font-size: 30px;
+
+        }
+        .click{
+            display: block;
+            margin: 0 auto;
+            position: absolute;
+            width: 10%;
+            left: 44%;
+            top: 60%;
+        }
+        .btn-primary {
+            color: #fff;
+            background-color: #46a0dd;
+            border-color: #46a0dd;
+        }
+        .btn-primary.active, .btn-primary:active, .btn-primary:hover, .open>.btn-primary.dropdown-toggle {
+            color: #fff;
+            background-color: #3287c0;
+            border-color: #3287c0;
+        }
+        .btn.blue.active, .btn.blue:active, .btn.blue:active:focus, .btn.blue:active:hover, .btn.blue:focus, .btn.blue:hover {
+            border-color: #1f89ea;
+            color: #ffffff;
+            background-color: #1f89ea;
+        }
+
+    </style>
+</head>
+<body>
+    <img src="dist/img/zjm.jpg" title="面条"/>
+    <span class="title">面条</span>
+    <br/>
+    <button type="button" class="click">今天吃啥？</button>
+</body>
+<script src="dist/js/jquery-1.8.2.min.js"></script>
+<script src="dist/js/sweetalert.min.js"></script>
+<script src="dist/js/ui-sweetalert.min.js"></script>
+<script>
+/*页面准备好时，轮询图片与名称*/
+$(function(){
+    var  t = animation();
+
+    $(".click").click(function(){
+        clearInterval(t);
+        var eatTxt= $(".title").text();
+        swal({
+                title: "你选择"+eatTxt,
+                text: "选择后就一定要去吃，谁不去谁是狗！",
+                type: "success",
+                confirmButtonText: "确定",
+                closeOnConfirm: false
+            }
+        )
+    });
+});
+
+
+
+
+function animation(){
+
+    //图片地址
+    var imgSrc = [
+        'dist/img/zjm.jpg',
+        'dist/img/gjf.jpg',
+        'dist/img/cf.jpg' ,
+        'dist/img/hf.jpg' ,
+        'dist/img/rgm.jpg'
+    ];
+
+    //文字，请保持对应位置一致
+    var title = [
+        '炸酱面',
+        '盖浇饭',
+        '炒饭'  ,
+        '盒饭'  ,
+        '热干面'
+    ];
+
+    //主要轮询code
+    var t = setInterval(function(){
+        var num = Math.floor(Math.random()*imgSrc.length);
+        $("img").attr('src',imgSrc[num]);
+        $(".title").text(title[num]);
+    },100);
+
+    return t;
+
+
+}
+</script>
+</html>
