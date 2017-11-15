@@ -32,6 +32,22 @@
             left: 44%;
             top: 60%;
         }
+        .click1{
+            display: block;
+            margin: 0 auto;
+            position: absolute;
+            width: 10%;
+            left: 44%;
+            top: 65%;
+        }
+        .click1{
+            display: block;
+            margin: 0 auto;
+            position: absolute;
+            width: 10%;
+            left: 44%;
+            top: 70%;
+        }
         .btn-primary {
             color: #fff;
             background-color: #46a0dd;
@@ -55,6 +71,8 @@
     <span class="title">面条</span>
     <br/>
     <button type="button" class="click">今天吃啥？</button>
+    <button type="button" class="click1">添加美食</button>
+    <div class="click2" id="food"></div>
 </body>
 <script src="dist/js/jquery-1.8.2.min.js"></script>
 <script src="dist/js/sweetalert.min.js"></script>
@@ -62,26 +80,6 @@
 <script>
 /*页面准备好时，轮询图片与名称*/
 $(function(){
-    var  t = animation();
-
-    $(".click").click(function(){
-        clearInterval(t);
-        var eatTxt= $(".title").text();
-        swal({
-                title: "你选择"+eatTxt,
-                text: "选择后就一定要去吃，谁不去谁是狗！",
-                type: "success",
-                confirmButtonText: "确定",
-                closeOnConfirm: false
-            }
-        )
-    });
-});
-
-
-
-
-function animation(){
 
     //图片地址
     var imgSrc = [
@@ -101,6 +99,38 @@ function animation(){
         '热干面'
     ];
 
+    var  t = animation(imgSrc,title);
+
+    $(".click").click(function(){
+        clearInterval(t);
+        var eatTxt= $(".title").text();
+        swal({
+                title: "你选择"+eatTxt,
+                text: "选择后就一定要去吃，谁不去谁是狗！",
+                type: "success",
+                confirmButtonText: "确定",
+                closeOnConfirm: false
+            }
+        )
+    });
+
+    $(".click1").click(function(){
+        clearInterval(t);
+
+        add_food(title);
+    });
+});
+
+
+/**
+ * 图片字符闪动
+ * @param imgSrc
+ * @param title
+ * @returns {number}
+ */
+function animation(imgSrc,title){
+
+
     //主要轮询code
     var t = setInterval(function(){
         var num = Math.floor(Math.random()*imgSrc.length);
@@ -112,5 +142,17 @@ function animation(){
 
 
 }
+
+
+function add_food(title){
+    var titleText = '';
+    $.each(title,function(e,i){
+        titleText += i+'<br/>';
+    });
+    $("#food").html(titleText);
+}
+
+
+
 </script>
 </html>
