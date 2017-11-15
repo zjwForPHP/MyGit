@@ -1,4 +1,9 @@
 <?php
+$i = 0;
 
-echo 'Hello Git!';
-echo 'Hello world!';
+while (true){
+
+    echo $i;
+    $i++;
+}
+
