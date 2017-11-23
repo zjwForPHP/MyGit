@@ -44,7 +44,7 @@
             display: block;
             margin: 0 auto;
             position: absolute;
-            width: 10%;
+
             left: 44%;
             top: 70%;
         }
@@ -68,23 +68,49 @@
             display: none;
         }
 
+        .fade-enter-active {
+            transition: all .3s ease;
+        }
+        .fade-leave-active {
+            transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+        }
+        .fade-enter, .fade-leave-to
+            /* .slide-fade-leave-active for below version 2.1.8 */ {
+            transform: translateX(10px);
+            opacity: 0;
+        }
+
     </style>
 </head>
 <body>
 <img src="dist/img/zjm.jpg" title="面条"/>
 <span class="title">面条</span>
 <br/>
-<button type="button" class="click">今天吃啥？</button>
+
 <div id="add" class="click1" v-cloak>
+    <button type="button" @click="choose(t)">去哪儿吃</button>
     <button type="button"  v-on:click="show = !show">添加店铺</button>
+
     <transition name="fade">
-        <ul v-if="show">
-            <li v-for="(item,index) in list">
-                {{item}}
-            </li>
-        </ul>
+        <div v-if="show">
+            <h5>已加入</h5>
+            <select  multiple >
+                <option v-for="(item,index) in list" v-if="item.flag" @click="add(item)">{{item.title}}</option>
+            </select>
+        </div>
+    </transition>
+
+
+    <transition name="fade">
+        <div v-if="show">
+            <h5>未加入</h5>
+            <select  multiple>
+                <option v-for="(item,index) in list" v-if="!item.flag" @click="del(item)">{{item.title}}</option>
+            </select>
+        </div>
     </transition>
 </div>
+
 <!--    <div class="click2" id="food"></div>-->
 </body>
 <script src="dist/js/jquery-1.8.2.min.js"></script>
@@ -94,7 +120,7 @@
 <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.4"></script>
 <script>
     /*页面准备好时，轮询图片与名称*/
-    $(function(){
+    /*$(function(){
 
         //图片地址
         var imgSrc = [
@@ -129,11 +155,13 @@
             )
         });
 
-        /*$(".click1").click(function(){
+        /!*$(".click1").click(function(){
          clearInterval(t);
          add_food(title);
-         });*/
-    });
+         });*!/
+    });*/
+
+
 
 
     /**
@@ -142,14 +170,14 @@
      * @param title
      * @returns {number}
      */
-    function animation(imgSrc,title){
+    function V_animation(data){
 
 
         //主要轮询code
         var t = setInterval(function(){
-            var num = Math.floor(Math.random()*imgSrc.length);
-            $("img").attr('src',imgSrc[num]);
-            $(".title").text(title[num]);
+            var num = Math.floor(Math.random()*data.length);
+            $("img").attr('src',data[num].src);
+            $(".title").text(data[num].title);
         },100);
 
         return t;
@@ -174,18 +202,91 @@
         el: '#add',
         data:{
             show:false,
-            list:[]
+            list:[],
+            filterList:[],
+            t:''
         },
         created:function(){
             var url = 'deal.php';
             var self = this;
             this.$http.get(url).then(function(response){
                 self.list = response.body;
+                for(var v in self.list){
+                    if(self.list[v].flag==1){
+                        self.filterList[v] = self.list[v];
+                    }
+                }
+                var t = this.animation();
+                this.t = t;
             },function(response){
                 console.log(response);
             })
 
         },
+        methods:{
+            add:function (item) {
+                item.flag = 0;
+                var url = 'deal.php?type=1';
+                var data = this.list;
+                this._post(url,data,function(res){
+                    if(res == 1){
+                        window.location.reload();
+                    }
+
+                });
+
+            },
+            del:function (item) {
+                item.flag = 1;
+                var url = 'deal.php?type=1';
+                var data = this.list;
+                this._post(url,data,function(res){
+                    if(res == 1){
+                        window.location.reload();
+                    }
+                });
+
+            },
+            choose:function (t){
+                clearInterval(t);
+                var eatTxt= $(".title").text();
+                swal({
+                        title: "你选择"+eatTxt,
+                        text: "选择后就一定要去吃，谁不去谁是狗！",
+                        type: "success",
+                        confirmButtonText: "确定",
+                        closeOnConfirm: false
+                    }
+                )
+            },
+            animation:function (){
+                //主要轮询code
+                var data = this.filterList;
+
+                var t = setInterval(function(){
+                    var num = Math.floor(Math.random()*data.length);
+                    $("img").attr('src',data[num].src);
+                    $(".title").text(data[num].title);
+                },100);
+
+                return t;
+            },
+
+            //post 方法封装
+            _post:function(url,params,callback){
+                this.$http.post(url,params).then(function(response){
+                    // 响应成功回调
+                    if(response.body==1){
+                        callback(response.body);
+                    }else{
+                        alert("发生错误:"+response.body.msg);
+                    }
+                }, function(response){
+                    alert(response.status+" 发生错误");
+                });
+
+            },
+        }
 
     });
 
