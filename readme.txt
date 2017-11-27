@@ -1,8 +1,7 @@
-Git is a distributed version control system.
-Git is free software distributed under the GPL.
-Git has a mutable index called stage.
-Git tracks changes of files.
-My stupid boss still prefers SVN.
-Creating a new branch is quick.
-Creating a new branch is quick and simple.
-This is test tag.
+
+
+A common package JavaScript project to simplify the coding time...
+
+My ability is very poor, I hope to make progress together.
+
+          书山有路勤为径，学海无涯苦作舟。
