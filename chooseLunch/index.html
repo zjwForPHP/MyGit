@@ -89,7 +89,7 @@
 
 <div id="add" class="click1" v-cloak>
     <button type="button" @click="choose(t)">去哪儿吃</button>
-    <button type="button"  v-on:click="show = !show">添加店铺</button>
+    <button type="button"  v-on:click="showList()">{{button}}</button>
 
     <transition name="fade">
         <div v-if="show">
@@ -202,6 +202,7 @@
         el: '#add',
         data:{
             show:false,
+            button:'加入店铺',
             list:[],
             filterList:[],
             t:''
@@ -270,6 +271,18 @@
                 },100);
 
                 return t;
+            },
+            showList:function (){
+                //显示或隐藏列表
+                this.show = !this.show;
+                this.button = this.show? "隐藏列表" :"加入店铺";
+//                if(this.show == true){
+//                    this.show = false;
+//                    this.button = '加入店铺';
+//                }else{
+//                    this.show = true;
+//                    this.button = '隐藏列表';
+//                }
             },
 
             //post 方法封装
